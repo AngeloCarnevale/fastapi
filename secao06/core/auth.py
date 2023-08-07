@@ -55,7 +55,6 @@ def criar_token_acesso(sub: str) -> str:
     http://jwt.io
     """
     
-    
     return _criar_token(
         tipo_token='access_token',
         tempo_vida=timedelta(minutes=settings.ACESS_TOKEN_EXPIRE_MINUTES),
