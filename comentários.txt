@@ -1,0 +1,1 @@
+pip install fastapi pymysql asyncmy sqlalchemy uvicorn python-jose[cryptography] pytz passlib python-multipart
