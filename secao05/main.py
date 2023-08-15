@@ -11,6 +11,7 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 origins = [
     "http://localhost",
     "http://localhost:3000",
+    "http://localhost:5173",
 ]
 
 app.add_middleware(
