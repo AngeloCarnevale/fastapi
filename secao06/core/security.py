@@ -13,6 +13,6 @@ def verificar_senha(senha: str, hash_senha: str)-> bool:
 
 def gerar_hash_senha(senha:str) -> str:
     """
-    Função qie gera o hash da senha
+    Função que gera o hash da senha
     """
     return CRIPTO.hash(senha)
