@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.exc import IntegrityError
 
 from models.usuario_model import UsuarioModel
 from schemas.usuario_schema import UsuarioSchemaBase, UsuarioSchemaCreate, UsuarioSchemaArtigos, UsuarioSchemaUp
@@ -25,14 +26,23 @@ def get_logado(usuario_logado: UsuarioModel = Depends(get_current_user)):
 # POST / SignUp
 @router.post('/signup', status_code=status.HTTP_201_CREATED, response_model=UsuarioSchemaBase)
 async def post_usuario(usuario: UsuarioSchemaCreate, db: AsyncSession = Depends(get_session)):
-    novo_usuario: UsuarioModel = UsuarioModel(nome=usuario.nome, sobrenome=usuario.sobrenome, email=usuario.email, senha=gerar_hash_senha(usuario.senha), is_admin=usuario.is_admin)
+    novo_usuario: UsuarioModel = UsuarioModel(
+        nome=usuario.nome, 
+        sobrenome=usuario.sobrenome, 
+        email=usuario.email, 
+        senha=gerar_hash_senha(usuario.senha), 
+        is_admin=usuario.is_admin)
     
     async with db as session:
-        session.add(novo_usuario)
-        await session.commit()
+        try:
+            session.add(novo_usuario)
+            await session.commit()
         
-        return novo_usuario
-
+            return novo_usuario
+        except IntegrityError:
+            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                                detail="Usuário já cadastrado")
+        
 # GET Usuarios
 router.get('/', response_model=List[UsuarioSchemaBase])
 async def get_usuarios(db: AsyncSession = Depends(get_session)):
@@ -105,7 +115,7 @@ async def put_usuario(usuario_id: int, db: AsyncSession = Depends(get_session)):
                                 status_code=status.HTTP_404_NOT_FOUND)
             
 # POST Login
-@router('/login')
+@router.post('/login')
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_session)):
     usuario = await autenticar(email=form_data.username, senha=form_data.password, db=db)
     
