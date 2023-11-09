@@ -1,0 +1,1 @@
+uvicorn port.fastapi.app:core_module --proxy-headers --host 127.0.0.1 --port 8000 --reload
