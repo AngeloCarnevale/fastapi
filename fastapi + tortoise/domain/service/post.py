@@ -15,3 +15,6 @@ class PostService(BaseModel):
     
     async def get(self, post_id: int):
         return await self.adapter.get(post_id)
+    
+    async def publish(self, post_id: int):
+        return await self.adapter.publish(post_id)
