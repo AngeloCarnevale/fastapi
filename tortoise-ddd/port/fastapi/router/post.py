@@ -4,11 +4,7 @@ from domain.service.post import PostService
 
 from port.factory.post import post_factory
 
-router = APIRouter(
-    prefix='/posts',
-    tags=['posts'],
-    responses={404: {'description': 'Not Found'}}
-)
+router = APIRouter()
 
 @router.get('/')
 async def list_posts(service: PostService = Depends(post_factory)):

@@ -1,1 +1,0 @@
-pip install fastapi pydantic-settings pymysql asyncmy sqlalchemy uvicorn python-jose[cryptography] pytz passlib python-multipart

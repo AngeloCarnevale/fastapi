@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from port.fastapi.config import configure_routers, configure_tortoise
+from port.fastapi.core.config import configure_routers, configure_tortoise
 
 def create_app() -> FastAPI:
     app = FastAPI()
